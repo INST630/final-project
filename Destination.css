@@ -16,10 +16,9 @@ img {
 
       html { height: 100% }
       body { height: 100%; margin: 0; padding: 0 }
-      #map_canvas1 { height: 100% }
-      #map_canvas2 { height: 100% }
+      #map_canvas1, #map_canvas2, #map1, #map2 { height: 100%; width: 45% }
 
-#map_canvas1, #map_canvas2 {
+#map_canvas1, #map_canvas2, #timeDiv1, #timeDiv2, #map1, #map2 {
 	display: inline-block;
 	margin: 2%;
 }
@@ -29,3 +28,5 @@ body
     background:#FFF;
     font-family: 'Ubuntu', sans-serif;
 }
+
+
