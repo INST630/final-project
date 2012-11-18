@@ -1,31 +1,38 @@
-;// Global variables
-var photosArrayGlobal;  // the array of photos to be displayed
-var photoIndexGlobal;   // the index into photosArrayGlobal of the current image beig displayed
-
-
-
-// This function creates the file names for all photos specified by the user, using
-// the current values for "folder", "base file name" and "number of photos".
-// Stores these file names in the global array.
-function onLoadPhotosButtonClick() {
-    alert("onLoadPhotosButtonClick function says hello");
+function loadDirections() {
+	var directionsReq = {
+			origin: document.getElementById("startAddress").value,
+			destination: document.getElementById("destination").value,
+			travelMode: google.maps.TravelMode.DRIVING,
+			unitSystem: google.maps.UnitSystem.IMPERIAL,
+			provideRouteAlternatives: true,
+			avoidTolls: true
+		}
+		
+	var d = new google.maps.DirectionsService();
+	var directionsDisplay = new google.maps.DirectionsRenderer();
+		
+	d.route(directionsReq, function (results) {
+		var mapOptions = {
+			center: new google.maps.LatLng(38.895111, -77.036667),
+			zoom: 17,
+			mapTypeId: google.maps.MapTypeId.ROADMAP
+			};
+			
+		console.log(results);
+		var map = new google.maps.Map(document.getElementById("map_canvas"), mapOptions);
+		directionsDisplay.setMap(map);
+			
+		directionsDisplay.setDirections(results);
+	});
 }
 
-// This initialization function is only used to set up some of the click handling functionality
+function onSubmitClick() {
+    alert("CONGRATULATIONS! YOU CLICKED A BUTTON");
+    loadDirections();
+}
+
 function init() {
-    // When the user clicks the loadPhotosButton, the "loadPhotos" function will be called
-    document.getElementById("loadPhotosButton").onclick = onLoadPhotosButtonClick;
-    
-    // Once you create functions to be called when other elements are clicked (e.g., the
-    // previous button, next button, image), you should assign the function names to the
-    // onclick properties of each element that will respond when the user clicks.
-    // Follow the pattern used above for the loadPhotosButton.
+    document.getElementById("submitForm").onclick = onSubmitClick;
 }
 
-
-/**
- * No need to edit below this line to meet the assignment requirements.
- */
-
-// Set it up so the init function is called as soon as the document finishes loading
 window.onload = init;
