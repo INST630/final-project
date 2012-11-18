@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta name="viewport" content="initial-scale=1.0, user-scalable=no" />
+    <style type="text/css">
+      html { height: 100% }
+      body { height: 100%; margin: 0; padding: 0 }
+      #map_canvas { height: 100% }
+    </style>
+    <script type="text/javascript"
+      src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBRebX-iNlv5yFfUMyIb0pjSte6ggj9d7Q&sensor=true">
+    </script>
+    <script type="text/javascript">
+      function initialize() {
+        var directionsReq = {
+			origin: "8191 Strawberry Lane, Falls Church",
+			destination: "National Gallery of Art",
+			travelMode: google.maps.TravelMode.DRIVING,
+			unitSystem: google.maps.UnitSystem.IMPERIAL,
+			provideRouteAlternatives: true,
+			avoidTolls: true
+		}
+		
+		var d = new google.maps.DirectionsService();
+		var directionsDisplay = new google.maps.DirectionsRenderer();
+		
+		d.route(directionsReq, function (results) {
+			var mapOptions = {
+				center: new google.maps.LatLng(38.895111, -77.036667),
+				zoom: 17,
+				mapTypeId: google.maps.MapTypeId.ROADMAP
+			};
+			
+			console.log(results);
+			var map = new google.maps.Map(document.getElementById("map_canvas"), mapOptions);
+			directionsDisplay.setMap(map);
+			
+			directionsDisplay.setDirections(results);
+		});
+      }
+    </script>
+  </head>
+  <body onload="initialize()">
+    <div id="map_canvas" style="width:100%; height:100%"></div>
+  </body>
+</html>

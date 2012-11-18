@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta name="viewport" content="initial-scale=1.0, user-scalable=no" />
+    <style type="text/css">
+      html { height: 100% }
+      body { height: 100%; margin: 0; padding: 0 }
+      #map_canvas { height: 100% }
+    </style>
+    <script type="text/javascript"
+      src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBRebX-iNlv5yFfUMyIb0pjSte6ggj9d7Q&sensor=true">
+    </script>
+    <script type="text/javascript">
+      function initialize() {
+        var geoOptions = {
+			address:"1633 Hydenwood Cres. Chesapeake",
+			region: "us"
+		}
+		var g = new google.maps.Geocoder();
+		g.geocode(geoOptions, function (results) {
+			var mapOptions = {
+          center: new google.maps.LatLng(results[0].geometry.location.Ya, results[0].geometry.location.Za),
+          zoom: 17,
+          mapTypeId: google.maps.MapTypeId.ROADMAP
+        };
+        var map = new google.maps.Map(document.getElementById("map_canvas"),
+            mapOptions);
+			console.log(results[0].geometry.location.Ya, results[0].geometry.location.Za);
+		});
+      }
+    </script>
+  </head>
+  <body onload="initialize()">
+    <div id="map_canvas" style="width:100%; height:100%"></div>
+  </body>
+</html>

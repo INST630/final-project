@@ -1,0 +1,15 @@
+#setupDiv {
+    border-width: 1px;
+    border-style:solid;
+    border-color: #cccccc;
+    padding: 5px;
+}
+
+img {
+    margin: 10px;
+    border-color: gray;
+}
+
+#error {
+    color: red;
+}
