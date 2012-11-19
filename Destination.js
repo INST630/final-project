@@ -4,10 +4,10 @@ var transitTime; //global variable for the transit time, for calculations
 
 function loadDriveDirections() { //loads map and results for driving route using the Google Directions API
 	var directionsReq = {
-			origin: "8191 Strawberry Lane, Falls Church, VA", //set to default for debugging
-			destination: "National Gallery of Art, Washington, DC", //set to default for debugging
-			//origin: document.getElementById("startAddress").value,
-			//destination: document.getElementById("destination").value,
+			//origin: "8191 Strawberry Lane, Falls Church, VA", //set to default for debugging
+			//destination: "National Gallery of Art, Washington, DC", //set to default for debugging
+			origin: document.getElementById("startAddress").value,
+			destination: document.getElementById("destination").value,
 			travelMode: google.maps.TravelMode.DRIVING,
 			unitSystem: google.maps.UnitSystem.IMPERIAL,
 			provideRouteAlternatives: true,
