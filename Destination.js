@@ -1,18 +1,18 @@
-var driveTime; //global variable for the driving time, for calculations later
-var transitTime; //global variable for the transit time, for calculations
+var driveTime; //global variable for the driving time
+var taxiTime;//global variable for the taxi driving time
+var transitTime; //global variable for the transit time
 
-
-function loadDriveDirections() { //loads map and results for driving route using the Google Directions API
+function loadDriveDirections() { //loads map and results for driving route: from start point to parking to destination using the Google Directions API
 	var directionsReq = {
 			//origin: "8191 Strawberry Lane, Falls Church, VA", //set to default for debugging
 			//destination: "National Gallery of Art, Washington, DC", //set to default for debugging
 			origin: document.getElementById("startAddress").value,
-			destination: document.getElementById("destination").value,
+			destination: document.getElementById("destination").value, //change to reflect parking 
 			travelMode: google.maps.TravelMode.DRIVING,
 			unitSystem: google.maps.UnitSystem.IMPERIAL,
 			provideRouteAlternatives: true,
 			avoidTolls: true
-		}
+	} 
 		
 	var d = new google.maps.DirectionsService();
 	var directionsDisplay = new google.maps.DirectionsRenderer();
@@ -26,7 +26,7 @@ function loadDriveDirections() { //loads map and results for driving route using
 			
 		console.log(results); //debugging
 		
-		var map = new google.maps.Map(document.getElementById("map_canvas1"), mapOptions); //writes the map to the DOM
+		var map = new google.maps.Map(document.getElementById("map_canvas_car"), mapOptions); //writes the map to the DOM
 		directionsDisplay.setMap(map);
 			
 		directionsDisplay.setDirections(results);
@@ -36,7 +36,45 @@ function loadDriveDirections() { //loads map and results for driving route using
 		
 		timeCalc(); //calls timeCalc function so it doesn't try to calculate before the results are back from the API
 	});
-}
+	
+}//close loadDriveDirections
+
+function loadTaxiDirections() { //loads map and results for driving route: from start point to end point using the Google Directions API
+	var directionsReq = {
+			//origin: "8191 Strawberry Lane, Falls Church, VA", //set to default for debugging
+			//destination: "National Gallery of Art, Washington, DC", //set to default for debugging
+			origin: document.getElementById("startAddress").value,
+			destination: document.getElementById("destination").value,
+			travelMode: google.maps.TravelMode.DRIVING,
+			unitSystem: google.maps.UnitSystem.IMPERIAL,
+			provideRouteAlternatives: true,
+			avoidTolls: true
+	}
+		
+	var d = new google.maps.DirectionsService();
+	var directionsDisplay = new google.maps.DirectionsRenderer();
+		
+	d.route(directionsReq, function (results) { //callback for results
+		var mapOptions = {
+			center: new google.maps.LatLng(38.895111, -77.036667), //sets center of map to DC area, since that's the scope of our app
+			zoom: 17,
+			mapTypeId: google.maps.MapTypeId.ROADMAP
+			};
+			
+		console.log(results); //debugging
+		
+		var map = new google.maps.Map(document.getElementById("map_canvas_taxi"), mapOptions); //writes the map to the DOM
+		directionsDisplay.setMap(map);
+			
+		directionsDisplay.setDirections(results);
+		
+		driveTime = results.routes[0].legs[0].duration.value; //sets the global variable to these results for calculating drive time
+		console.log(driveTime); //debugging
+		
+		timeCalc(); //calls timeCalc function so it doesn't try to calculate before the results are back from the API
+	});
+} //close load Taxi Directions
+
 
 function loadTransitDirections() { //loads map and results for public transit route using the Google Directions API
 	var directionsReq = {
@@ -47,7 +85,7 @@ function loadTransitDirections() { //loads map and results for public transit ro
 			travelMode: google.maps.TravelMode.TRANSIT,
 			unitSystem: google.maps.UnitSystem.IMPERIAL,
 			provideRouteAlternatives: true
-		}
+	}
 		
 	var d = new google.maps.DirectionsService();
 	var directionsDisplay = new google.maps.DirectionsRenderer();
@@ -61,7 +99,7 @@ function loadTransitDirections() { //loads map and results for public transit ro
 			
 		console.log(results); //debugging
 		
-		var map = new google.maps.Map(document.getElementById("map_canvas2"), mapOptions);//writes the resulting map to the DOM
+		var map = new google.maps.Map(document.getElementById("map_canvas_transit"), mapOptions);//writes the resulting map to the DOM
 		
 		directionsDisplay.setMap(map);
 			
@@ -73,12 +111,16 @@ function loadTransitDirections() { //loads map and results for public transit ro
 		
 		console.log(transitTime); //debugging
 	});
-}
+} //close load transit directions
 	
 function timeCalc() { //tells the user which route is faster
 	var timeDifference; //the time difference between the two routes
 	
 	if (driveTime) { //displays the total route time for the driving route
+		document.getElementById("timeDiv1").innerHTML = "Driving Route: " + Math.round(driveTime / 60) + " minutes"; //change route to reflect parking
+	}
+	
+	if (taxiTime){ //displays the total route time for the taxi route
 		document.getElementById("timeDiv1").innerHTML = "Driving Route: " + Math.round(driveTime / 60) + " minutes";
 	}
 	
@@ -86,33 +128,131 @@ function timeCalc() { //tells the user which route is faster
 		document.getElementById("timeDiv2").innerHTML = "Transit Route: " + Math.round(transitTime / 60) + " minutes";
 	}
 	
-	//calculates the time saved when using one route over the other. Tells which is shorter and by how long
+	//calculates the time saved when using one route over the other  two. Tells which is shorter and by how long.
 	if(driveTime && transitTime) { //makes sure both variables have a value before attempting to calculate the values, so as to avoid a return of undefined
-		if (driveTime < transitTime) {
+		if (driveTime < transitTime && driveTime< taxiTime) {
 			timeDifference = transitTime - driveTime;
 			timeDifference = Math.round(timeDifference / 60); //Google API measures time in seconds, so is converted to minutes and rounded to nearest integer
 			document.getElementById("resultsDiv").innerHTML = "Driving to this destination is faster by " + timeDifference + " minutes.";
-		} else if (transitTime < driveTime) {
+		
+		} else if (taxiTime < transitTime &&  driveTime < driveTime) {
+			timeDifference = transitTime - taxiTime;
+			timeDifference = Math.round(timeDifference / 60); //Google API measures time in seconds, so is converted to minutes and rounded to nearest integer
+			document.getElementById("resultsDiv").innerHTML = "Taking a taxi to this destination is faster by " + timeDifference + " minutes.";	
+			
+		} else if (transitTime < driveTime && driveTime < taxiTime) {
 			timeDifference = driveTime - transitTime;
 			timeDifference = Math.round(timeDifference / 60); //Google API measures time in seconds, so is converted to minutes and rounded to nearest integer
 			document.getElementById("resultsDiv").innterHTML = "Taking public transit to this destination is faster by " + timeDiffence + " minutes";
 		} else {
-			document.getElementById("resultsDiv").innerHTML = "Both routes take the same amount of time."; //if both are equal, alerts the user
+			document.getElementById("resultsDiv").innerHTML = "All routes take the same amount of time."; //if all are equal, alerts the user
 		}
 	console.log(timeDifference); //debugging
 	}	
-}
+} //close TimeCalc
 
 function onSubmitClick() { //calls the map loading functions when the user clicks the submit button
     //alert("CONGRATULATIONS! YOU CLICKED A BUTTON");
     loadDriveDirections();
     loadTransitDirections();
+    loadTaxiDirections();
     return false; //makes sure the form doesn't submit itself
+}
+
+function onCarClick(){
+	document.getElementById("carContent").style.display="block";
+	document.getElementById("transitContent").style.display="none";
+	document.getElementById("taxiContent").style.display="none";
+}
+
+function onTaxiClick(){
+	document.getElementById("carContent").style.display="none";
+	document.getElementById("transitContent").style.display="none";
+	document.getElementById("taxiContent").style.display="block";
+}
+
+function onTransitClick(){
+	document.getElementById("carContent").style.display="none";
+	document.getElementById("transitContent").style.display="block";
+	document.getElementById("taxiContent").style.display="none";
+}
+
+function calcCostClick(){
+	var input = document.getElementById("calcCost").checked;
+	if(input){
+	document.getElementById("hiddenCostCalculator").style.display="block";
+	}else{
+		
+	document.getElementById("hiddenCostCalculator").style.display="none";
+	}
 }
 
 function init() {
     document.getElementById("submitForm").onclick = onSubmitClick;
     document.getElementById("informationForm").onsubmit = onSubmitClick; //after filling out form, user can submit by pressing enter
+    document.getElementById("driveLink").onclick=onCarClick;
+    document.getElementById("taxiLink").onclick=onTaxiClick;
+    document.getElementById("transitLink").onclick=onTransitClick;
+    document.getElementById("calcCost").onclick=calcCostClick;
+     var geoOptions =   {
+			    address: "1633 Hydenwood Cres. Chesapeake",
+			    region: "us"
+			}
+		
+			var g = new google.maps.Geocoder();
+			g.geocode(geoOptions, function (results) {
+			var mapOptions = {
+			    center: new google.maps.LatLng(results[0].geometry.location.Ya, results[0].geometry.location.Za),
+			     zoom: 17,
+			     mapTypeId: google.maps.MapTypeId.ROADMAP
+			};
+			
+			var map = new google.maps.Map(document.getElementById("map_canvas_car"),
+			    mapOptions);
+		    
+			console.log(results[0].geometry.location.Ya, results[0].geometry.location.Za);
+			});
+    
+     var geoOptions =   {
+			    address: "1633 Hydenwood Cres. Chesapeake",
+			    region: "us"
+			}
+		
+			var g = new google.maps.Geocoder();
+			g.geocode(geoOptions, function (results) {
+			var mapOptions = {
+			    center: new google.maps.LatLng(results[0].geometry.location.Ya, results[0].geometry.location.Za),
+			     zoom: 17,
+			     mapTypeId: google.maps.MapTypeId.ROADMAP
+			};
+			
+			var map = new google.maps.Map(document.getElementById("map_canvas_taxi"),
+			    mapOptions);
+		    
+			console.log(results[0].geometry.location.Ya, results[0].geometry.location.Za);
+			});
+    
+    
+     var geoOptions = {
+			    address: "1633 Hydenwood Cres. Chesapeake",
+			    region: "us"
+			}
+		
+			var g = new google.maps.Geocoder();
+			g.geocode(geoOptions, function (results) {
+			var mapOptions = {
+			    center: new google.maps.LatLng(results[0].geometry.location.Ya, results[0].geometry.location.Za),
+			     zoom: 17,
+			     mapTypeId: google.maps.MapTypeId.ROADMAP
+			};
+			
+			var map = new google.maps.Map(document.getElementById("map_canvas_transit"),
+			    mapOptions);
+		    
+			console.log(results[0].geometry.location.Ya, results[0].geometry.location.Za);
+			});
+    
+    
 }
 
 window.onload = init;
