@@ -28,11 +28,15 @@
 			
 			<div id = "directionsForm">
 				
-				Starting address: <input type="text" id="startAddress" placeholder="1600 Pennsylvania Ave. Washington, DC"/> <br />
+				<form id = "informationForm" action = "">
 				
-				Destination: <input type="text" id="destination" placeholder="US Capitol Building"/> <br />
+					Starting address: <input type="text" id="startAddress" placeholder="1600 Pennsylvania Ave. Washington, DC"/> <br />
+					
+					Destination: <input type="text" id="destination" placeholder="US Capitol Building"/> <br />
+					
+					<button id="submitForm">Submit</button>
 				
-				<button id="submitForm">Submit</button>
+				</form>
 				
 			</div>
 			
@@ -42,13 +46,15 @@
 			
 			<div id = "map1">
 						
-				<div id="map_canvas1" style="width:45%; height:50%"></div>
+				<div id="map_canvas1"></div>
 				
 				<div id="timeDiv1"></div>
 				
 			</div>
+			
+			<div id = "map2">
 		
-				<div id="map_canvas2" style="width:45%; height:50%"></div>
+				<div id="map_canvas2"></div>
 				
 				<div id="timeDiv2"></div>
 			
