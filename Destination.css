@@ -23,12 +23,31 @@ img {
 	margin: 2%;
 }
 
+.mapdiv{
+    height: 400px;
+    width: 400px;
+}
+
 body 
 {
     background:#FFF;
     font-family: 'Ubuntu', sans-serif;
 }
- #mapWrap {
+
+#driving.boxed {
+  border: 1px solid green ;
+}
+
+#taxi.boxed {
+  border: 1px solid orange ;
+}
+
+#transit.boxed {
+  border: 1px solid blue ;
+}
+
+
+#mapWrap {
 	width: 100%;
 	height: 100%;
 }
@@ -43,4 +62,16 @@ body
 	margin: 2%;
 }
 
+#sideWrap {
+    width: 400px;
+    float:left;
+}
+
+#tabsWrap div {
+    float:left;
+}
+
+.tabContent{
+   /* float:left;*/
+}
 
