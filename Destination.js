@@ -4,7 +4,7 @@ var transitTime; //global variable for the transit time
 
 var costGas;//avg of gas costs by geolocation
 
-var startAddress;
+var startAddress;//global for start address
 
 function gasCallBack(gasFeedResults) {
 					var numStations=0;
@@ -177,7 +177,7 @@ function loadTransitDirections() { //loads map and results for public transit ro
 function timeCalc() { //tells the user which route is faster
 	var timeDifference; //the time difference between the three routes
 	
-	if (driveTime ) { //displays the total route time for the driving route
+	if (driveTime) { //displays the total route time for the driving route
 		document.getElementById("timeDiv1").innerHTML = "Driving Route: " + Math.round(driveTime / 60) + " minutes"; //change route to reflect parking
 		//don't grey drive
 	} else {
@@ -185,7 +185,7 @@ function timeCalc() { //tells the user which route is faster
 	}
 	
 	if (taxiTime){ //displays the total route time for the taxi route
-		document.getElementById("timeDiv1").innerHTML = "Driving Route: " + Math.round(driveTime / 60) + " minutes";
+		document.getElementById("timeDiv1").innerHTML = "Driving Route: " + Math.round(taxiTime / 60) + " minutes";
 		//don't grey taxi
 	}else {
 		//grey taxi
