@@ -292,11 +292,13 @@ function showmap(id){
 	
 }
 
+
+
 function init() {
     document.getElementById("submitForm").onclick = onSubmitClick;
     document.getElementById("informationForm").onsubmit = onSubmitClick; //after filling out form, user can submit by pressing enter
-    document.getElementById("driveLink").onclick=onCarClick;
-    document.getElementById("taxiLink").onclick=onTaxiClick;
+    document.getElementById("driving").onclick=onCarClick;
+    document.getElementById("transit").onclick=onTaxiClick;
     document.getElementById("transitLink").onclick=onTransitClick;
     document.getElementById("calcCost").onclick=calcCostClick;
     showmap("map_canvas_car");

@@ -53,15 +53,15 @@
 						
 							<input type="checkbox" name="transportType" value="Taxi"> Taxi </input> <br> 
 						
-							<input type="checkbox" name="transportType" value="Public Transit">Public Transit </input>
+							<input type="checkbox" name="transportType" value="Public Transit"> Public Transit </input>
 							
 							<br/>
 						
-							<input type="checkbox" name="searchRideshare" value="openRideShare">Search for RideShare groups? </input> <!--checking box will bring up zimride api search info --> 
+							<input type="checkbox" name="searchRideshare" value="openRideShare"> Search for RideShare groups? </input> <!--checking box will bring up zimride api search info --> 
 							
 							<br/>
 						
-							<input type="checkbox" name="costCalculator" value="calculateCost"  id="calcCost">Calculate Cost?</input>
+							<input type="checkbox" name="costCalculator" value="calculateCost"  id="calcCost"> Calculate Cost?</input>
 							
 							<br/>
 							
@@ -93,17 +93,17 @@
 
 					<div id= "tabsWrap"> 
 					
-						<div id="driving" class="boxed">
-						<a id="driveLink" href="#">Driving</a>
-						</div>
-					
-						<div id="taxi" class="boxed">
-						<a id="taxiLink" href="#">Taxi</a>
-						</div>   
-					
-						<div id="transit" class="boxed">
-						<a id="transitLink" href="#">Transit</a>
-						</div>
+						<ul class="nav nav-tabs">
+							
+							<li><a href="#driving" data-toggle="tab">Driving</a></li>
+							
+							<li><a href="#transit" data-toggle="tab">Transit</a></li>
+							
+							<li><a href="#taxi" data-toggle="tab">Taxi</a></li>
+							
+							<li><a href="#rideshare" data-toggle="tab">Find a Rideshare</a></li>
+							
+						</ul>
 					
 					</div> <!-- close tabs wrap-->
 				
