@@ -182,14 +182,14 @@ function timeCalc() { //tells the user which route is faster
 	
 } //close TimeCalc
 
-function onSubmitClick(showMaps) { //calls the map loading functions when the user clicks the submit button
+function onSubmitClick() { //calls the map loading functions when the user clicks the submit button
 	//startAddress = $("#startAddress").val();
 	//destinationAddress = $("#destination").val();
 	startAddress = "The White House";
 	destinationAddress = "US Capitol Building";
 
     $('#map_dummy').hide();
-    $('ul.nav-tabs li:nth-of-type(2) a').tab('show');
+    $('#drivingTab').tab('show');
 
     drawMaps();
 
