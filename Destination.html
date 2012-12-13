@@ -24,50 +24,32 @@
 							Starting address: <input type="text" id="startAddress" placeholder="1600 Pennsylvania Ave. Washington, DC"/> <br />
 							Destination: <input type="text" id="destination" placeholder="US Capitol Building"/> <br />
 							Departure time: <input type="text" id="departureTime" placeholder="12:00PM"/> <br/>
-							<p> Which transportation do you want to compare? </p>
-							<input type="checkbox" name="transportType" value="Car"/> Car <br/> 
-							<input type="checkbox" name="transportType" value="Taxi"/> Taxi <br/> 
-							<input type="checkbox" name="transportType" value="Public Transit"/> Public Transit <br/>
-							<input type="checkbox" name="costCalculator" value="calculateCost"  id="calcCost"/> Calculate Cost?
+							Number of Travellers: <input type= "number" id="numTravellers" placeholder= "2"/>
 							<br/>
-							<br/>
-							<div id ="hiddenCostCalculator" style="display: none;"> <!--  wil add in Popup.show() to js file: if user checks box, unhide -->
-								 Number of Hours at Destination: <input type="datetime" id="timeLeaving" placeholder= "08:00"/> <br />
-								 Number of Travellers: <input type= "number" id="numTravellers" placeholder= "2"/> <br />
-								 Car MPG: <input type="number" id="mpg" placeholder= "20" /> <br />
-							</div>
-							<button id="submitForm">Submit</button>
+							<button id="submitForm">Map it!</button>
 						</form>
 					</div> <!--close directions form-->
 				</div>  <!--close sideWrap -->
 				<div id= "mainWrap" class = "span9">
 					<div id= "tabsWrap">			
 						<ul class="nav nav-tabs">
-							<li><a href="#driving" data-toggle="tab">Driving</a></li>
-							<li><a href="#transit" data-toggle="tab">Transit</a></li>
-							<li><a href="#taxi" data-toggle="tab">Taxi</a></li>
+							<li><a href="#driving" data-toggle="tab" data-mapid="map_canvas_driving">Driving</a></li>
+							<li><a href="#transit" data-toggle="tab" data-mapid="map_canvas_transit">Transit</a></li>
+							<li><a href="#taxi" data-toggle="tab" data-mapid="map_canvas_taxi">Taxi</a></li>
 						</ul>
 					</div> <!-- close tabs wrap-->
 					<br/>
 					<br/>
+					<div id="map_dummy" class="mapdiv span10"></div>
 					<div class="tab-content">
-						<div class="tab-pane active" id="carContent">
-							<p> Time:  </p>
-							<p> Distance: </p>
-							<p> Directions: </p>
-							<div id="map_canvas_car" class="mapdiv span10">   </div>
+						<div class="tab-pane" id="driving">
+							<div id="map_canvas_driving" class="mapdiv span10">   </div>
 						</div>
-						<div class="tab-pane" id="taxiContent">
-							<p> Time:  </p>
-							<p> Distance: </p>
-							<p> Directions: </p>
-							<div id="map_canvas_taxi" class="mapdiv span10"> </div>
-						</div>
-						<div class="tab-pane" id="transitContent">
-							<p> Time:  </p>
-							<p> Distance: </p>
-							<p> Directions: </p>
+						<div class="tab-pane" id="transit">
 							<div id="map_canvas_transit" class="mapdiv span10"> </div>
+						</div>
+						<div class="tab-pane" id="taxi">
+							<div id="map_canvas_taxi" class="mapdiv span10"> </div>
 						</div>
 					</div>
 				</div>
