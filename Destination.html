@@ -1,156 +1,77 @@
 <!doctype html>
-<html>
-    <head> 
+<html>
+    <head> 
         <meta charset="UTF-8" /> 
-        
 		<title>Destination Calculation</title>
-		
 		<link href='http://fonts.googleapis.com/css?family=Ubuntu' rel='stylesheet' type='text/css'>
-		
 		<link rel="stylesheet" href="Destination.css" />
-		
 		<link rel="stylesheet" href="bootstrap/css/bootstrap.min.css"/>
-		
 		<script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBRebX-iNlv5yFfUMyIb0pjSte6ggj9d7Q&sensor=true"></script>
-		 		
 		<script type="text/javascript" src="Destination.js"></script>
-		
 		<script type="text/javascript" src="jquery.min.js"></script>
-		
 		<script type="text/javascript" src="bootstrap/js/bootstrap.min.js"></script>
-
     </head>	
 	<body>
-	     
-		
-		    
-		<div class = "container-fluid" id="container">
-			
-			<div class = "row-fluid">
-	  
-				<div id="sideWrap" class = "span2 offset1"> 
-			
-					<div id = "aboutApp">
-						
+		<div class ="container-fluid" id="container">
+			<div class ="row-fluid">
+				<div id="sideWrap" class ="span2 offset1"> 
+					<div id ="aboutApp">
 						<h1> Destination Calculation </h1>
-						
 						<p> Please enter your starting point, destination, and preferences below.</p>
-						   
-					</div>
-				
-					<div id = "directionsForm"> <!--change this to "inputForm-->
-						
-						<form id = "informationForm" action = "">
-						
+					</div>		
+					<div id ="directionsForm"> <!--change this to "inputForm-->
+						<form id ="informationForm" action ="">
 							Starting address: <input type="text" id="startAddress" placeholder="1600 Pennsylvania Ave. Washington, DC"/> <br />
-							
 							Destination: <input type="text" id="destination" placeholder="US Capitol Building"/> <br />
-						
-						
+							Departure time: <input type="text" id="departureTime" placeholder="12:00PM"/> <br/>
 							<p> Which transportation do you want to compare? </p>
-							
-							<input type="checkbox" name="transportType" value="Car"> Car </input> <br> 
-						
-							<input type="checkbox" name="transportType" value="Taxi"> Taxi </input> <br> 
-						
-							<input type="checkbox" name="transportType" value="Public Transit"> Public Transit </input>
-							
+							<input type="checkbox" name="transportType" value="Car"/> Car <br/> 
+							<input type="checkbox" name="transportType" value="Taxi"/> Taxi <br/> 
+							<input type="checkbox" name="transportType" value="Public Transit"/> Public Transit <br/>
+							<input type="checkbox" name="costCalculator" value="calculateCost"  id="calcCost"/> Calculate Cost?
 							<br/>
-						
-							<input type="checkbox" name="searchRideshare" value="openRideShare"> Search for RideShare groups? </input> <!--checking box will bring up zimride api search info --> 
-							
 							<br/>
-						
-							<input type="checkbox" name="costCalculator" value="calculateCost"  id="calcCost"> Calculate Cost?</input>
-							
-							<br/>
-							
-							<br/>
-						
-							<div id = "hiddenCostCalculator" style="display: none;"> <!--  wil add in Popup.show() to js file: if user checks box, unhide --> 
-							
-								
+							<div id ="hiddenCostCalculator" style="display: none;"> <!--  wil add in Popup.show() to js file: if user checks box, unhide -->
 								 Number of Hours at Destination: <input type="datetime" id="timeLeaving" placeholder= "08:00"/> <br />
-							
 								 Number of Travellers: <input type= "number" id="numTravellers" placeholder= "2"/> <br />
-							
-								  Car MPG: <input type="number" id="mpg" placeholder= "20" /> <br />
-								
+								 Car MPG: <input type="number" id="mpg" placeholder= "20" /> <br />
 							</div>
-						
-					
 							<button id="submitForm">Submit</button>
-							
 						</form>
-						
 					</div> <!--close directions form-->
-				
 				</div>  <!--close sideWrap -->
-				
-				
-				
 				<div id= "mainWrap" class = "span9">
-
-					<div id= "tabsWrap"> 
-					
+					<div id= "tabsWrap">			
 						<ul class="nav nav-tabs">
-							
 							<li><a href="#driving" data-toggle="tab">Driving</a></li>
-							
 							<li><a href="#transit" data-toggle="tab">Transit</a></li>
-							
 							<li><a href="#taxi" data-toggle="tab">Taxi</a></li>
-							
-							<li><a href="#rideshare" data-toggle="tab">Find a Rideshare</a></li>
-							
 						</ul>
-					
 					</div> <!-- close tabs wrap-->
-				
 					<br/>
-					
 					<br/>
-				
-					<div id="carContent" class="tabContent">
-						<p> Time:  </p>
-				
-						<p> Distance: </p>
-					
-						<p> Directions: </p>
-						
-					   
-						<div id="map_canvas_car" class="mapdiv span10">   </div>
-					
-					</div> <!--close car content-->
-				
-					<div id="taxiContent" class="tabContent" style="display: none;">
-						<p> Time:  </p>
-				
-						<p> Distance: </p>
-					
-						<p> Directions: </p>
-						
-					
-						<div id="map_canvas_taxi" class="mapdiv span10"> </div>
-				
-					</div> <!--close taxi content-->
-				
-					<div id="transitContent" class="tabContent" style="display: none;">
-					
-						<p> Time:  </p>
-				
-						<p> Distance: </p>
-						
-						<p> Directions: </p>
-						
-					
-						<div id="map_canvas_transit" class="mapdiv span10"> </div>
-					
-					</div>  <!--close transit content -->
-					
+					<div class="tab-content">
+						<div class="tab-pane active" id="carContent">
+							<p> Time:  </p>
+							<p> Distance: </p>
+							<p> Directions: </p>
+							<div id="map_canvas_car" class="mapdiv span10">   </div>
+						</div>
+						<div class="tab-pane" id="taxiContent">
+							<p> Time:  </p>
+							<p> Distance: </p>
+							<p> Directions: </p>
+							<div id="map_canvas_taxi" class="mapdiv span10"> </div>
+						</div>
+						<div class="tab-pane" id="transitContent">
+							<p> Time:  </p>
+							<p> Distance: </p>
+							<p> Directions: </p>
+							<div id="map_canvas_transit" class="mapdiv span10"> </div>
+						</div>
+					</div>
 				</div>
-		    
 		    </div>
-		
-	 </body>
+		</div>
+	 </body>
 </html>
