@@ -90,7 +90,38 @@ function loadDriveDirections() { //loads map and results for driving route: from
 
 
 function loadTaxiDirections() { //loads map and results for driving route: from start point to end point using the Google Directions API
+    var directionsReq = {
+        origin: startAddress,
+        destination: destinationAddress, //change to reflect parking 
+        travelMode: google.maps.TravelMode.DRIVING,
+        unitSystem: google.maps.UnitSystem.IMPERIAL,
+        provideRouteAlternatives: true,
+        avoidTolls: true
+    };
 
+    var d = new google.maps.DirectionsService();
+    var directionsDisplay = new google.maps.DirectionsRenderer();
+
+    d.route(directionsReq, function (results) { //callback for results
+        var mapOptions = {
+            center: new google.maps.LatLng(38.895111, -77.036667), //sets center of map to DC area, since that's the scope of our app
+            zoom: 17,
+            mapTypeId: google.maps.MapTypeId.ROADMAP
+        };
+
+        console.log('t', results); //debugging
+        
+        var map = new google.maps.Map($("#map_canvas_taxi")[0], mapOptions); //writes the map to the DOM
+        directionsDisplay.setMap(map);
+
+        directionsDisplay.setDirections(results);
+
+        driveTime = results.routes[0].legs[0].duration.value; //sets the global variable to these results for calculating drive time
+        
+        //$("#carTime").innerHTML = results.routes[0].legs[0].duration.text;
+        //$("#carDistance").innerHTML = results.routes[0].legs[0].distance.text;
+        console.log(driveTime); //debugging
+    });
 } //close load Taxi Directions
 
 
@@ -100,7 +131,10 @@ function loadTransitDirections() { //loads map and results for public transit ro
         destination: destinationAddress,
         travelMode: google.maps.TravelMode.TRANSIT,
         unitSystem: google.maps.UnitSystem.IMPERIAL,
-        provideRouteAlternatives: true
+        provideRouteAlternatives: true,
+        transitOptions: {
+            departureTime: buildUnixTime($('#departureTime').val())
+        }
 	}
 		
     var d = new google.maps.DirectionsService();
@@ -194,6 +228,19 @@ function onSubmitClick() { //calls the map loading functions when the user click
     drawMaps();
 
     return false; //makes sure the form doesn't submit itself
+}
+
+function buildUnixTime(userInputTime) {
+    var now = new Date();
+    var dd = now.getDate();
+    var mm = now.getMonth()+1; //January is 0!
+    var yyyy = now.getFullYear();
+    var date = yyyy + '-' + mm + '-' + dd;
+    var timeString = date + ' ' + userInputTime;
+    
+    var unixTime = Date.parse(timeString);
+    console.log(unixTime);
+    return new Date(unixTime);
 }
 
 function drawMaps() {
