@@ -76,3 +76,12 @@ body
 .tabContent{
    /* float:left;*/
 }
+
+.nav-tabs {
+   border: 1px solid #ddd;
+   color: #ffffff;
+   background-color: #FFFF00;
+  -webkit-border-radius: 0;
+     -moz-border-radius: 0;
+          border-radius: 0;
+}

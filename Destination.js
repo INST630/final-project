@@ -75,7 +75,14 @@ function loadDriveDirections() { //loads map and results for driving route: from
         g.geocode(geoOptions, function (geocodeResults) {
             var inputLat= geocodeResults[0].geometry.location.lat();
             var inputLng= geocodeResults[0].geometry.location.lng();
-
+	    var county = null;
+			for(var i=0; i<geocodeResults[0].address_components.length(); i++){
+				if(geocodeResults[0].address_components[i].types.contains("administrative_area_level_2")){
+					county = geocodeResults[0].address_components[i].short_name;
+				}
+			}
+			console.log("county");
+			
             $.ajax({
                 url: "http://devapi.mygasfeed.com/stations/radius/" + inputLat + "/" + inputLng + "/5/reg/price/rfej9napna.json?callback=?",
                 dataType: "jsonp",
@@ -85,8 +92,8 @@ function loadDriveDirections() { //loads map and results for driving route: from
             //timeCalc(); //calls timeCalc function so it doesn't try to calculate before the results are back from the API
         });// end geocode 
     }); // end route
+    
 }//close loadDriveDirections
-
 
 
 function loadTaxiDirections() { //loads map and results for driving route: from start point to end point using the Google Directions API
