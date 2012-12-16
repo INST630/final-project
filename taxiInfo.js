@@ -102,8 +102,9 @@ var taxiInfo = {
             }
         ]
     },
+
     
-    "PG":{
+    "Prince George's":{
         "initialCharge": 3.00,
         "fractionCharge": 0.25,
         "fractionSize": (1.0/7.0),
@@ -129,7 +130,7 @@ var taxiInfo = {
         ]
     },
     
-    "MoCo":{
+    "Montgomery":{
         "initialCharge": 4.00,
         "fractionCharge": 0.50,
         "fractionSize": (1.0/4.0),

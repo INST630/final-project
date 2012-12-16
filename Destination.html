@@ -12,68 +12,129 @@
 		<script type="text/javascript" src="bootstrap/js/bootstrap.min.js"></script>
 		<script type="text/javascript" src="taxi.js"></script>
 		<script type="text/javascript" src="taxiInfo.js"></script> 
+		<script type="text/javascript" src="stations.js"></script> 
     </head>	
 	<body>
 		<div class ="container-fluid" id="container">
-			<div class ="row-fluid">
-				<div id="sideWrap" class ="span2 offset1"> 
-					<div id ="aboutApp">
-						<h1> Destination Calculation </h1>
-						<p> Please enter your starting point, destination, and preferences below.</p>
-					</div>		
-					<div id ="directionsForm"> <!--change this to "inputForm-->
-						<form id ="informationForm" action ="">
-							Starting address: <input type="text" id="startAddress" placeholder="1600 Pennsylvania Ave. Washington, DC"/> <br />
-							Destination: <input type="text" id="destination" placeholder="US Capitol Building"/> <br />
-							Departure time: <input type="text" id="departureTime" placeholder="12:00 PM"/> <br/>
-							Number of Travellers: <input type= "number" id="numTravellers" placeholder= "2"/>
-							<br/>
-							<button id="submitForm">Map it!</button>
-						</form>
-					</div> <!--close directions form-->
-				</div>  <!--close sideWrap -->
-				<div id= "mainWrap" class = "span9">
-					<div id= "tabsWrap">			
-						<ul class="nav nav-tabs">
-							<li><a href="#driving" id="drivingTab" data-toggle="tab" data-mapid="map_canvas_driving">Driving</a></li>
-							<li><a href="#transit" id="transitTab" data-toggle="tab" data-mapid="map_canvas_transit">Transit</a></li>
-							<li><a href="#taxi" id="taxiTab" data-toggle="tab" data-mapid="map_canvas_taxi">Taxi</a></li>
-						</ul>
-					</div> <!-- close tabs wrap-->
-					<br/>
-					<br/>
-					<div id="map_dummy" class="mapdiv span10"></div>
-					<div class="tab-content">
-						<div class="tab-pane" id="driving">
-						    
-							<div id="map_canvas_driving" class="mapdiv span10">   </div>
-							<div id="map_driving_directions"></div>
+		    <div class ="row-fluid">
+			    <div id="sideWrap" class ="span3">
+				
+				    <div id ="aboutApp">
+					    <h1> Destination Calculation </h1>
+					    <p> Please enter your starting point, destination, and preferences below.</p>
+				    </div>
+				    
+				    <div id ="directionsForm"> 
+					    <form id ="informationForm" action ="">
+						Starting address: <input type="text" id="startAddress" placeholder="1600 Pennsylvania Ave. Washington, DC"/> <br />
+						Destination: <input type="text" id="destination" placeholder="US Capitol Building"/> <br />
+						Departure time: <input type="text" id="departureTime" placeholder="12:00 PM"/> <br/>
+						Number of Travellers: <input type= "number" id="numTravellers" placeholder= "2" />
+						<br/>
+						<button id="submitForm">Map it!</button>
+					    </form> <!--close information form-->
+				    </div> <!--close directions form-->
+			    </div>  <!--close sideWrap -->
+			    
+			    <div id= "mainWrap" class = "span9">
+				    <!--div id= "tabsWrap"-->			
+					<ul class="nav nav-tabs">
+					    <li><a href="#driving" id="drivingTab" data-toggle="tab" data-mapid="map_canvas_driving">Driving</a></li>
+					    <li><a href="#transit" id="transitTab" data-toggle="tab" data-mapid="map_canvas_transit">Transit</a></li>
+					    <li><a href="#taxi" id="taxiTab" data-toggle="tab" data-mapid="map_canvas_taxi">Taxi</a></li>
+					</ul>
+				    <!--/div> <!-- close tabs wrap-->
+				    <div id="map_dummy" class="mapdiv"></div>
+				    <div class="tab-content">
+					    <div class="tab-pane" id="driving">
+						    <div class= "row-fluid">
+							<div class="span2 th">Estimated time</div>
+							<div class="span2 th">Distance </div>
+							<div class="span2 th">Estimated fuel cost</div>
+							<div class="span2 th">Estimated total cost (at 20 mpg)</div>
+						    </div>
+							
+						    <div class= "row-fluid">
+							<div class="span2 td"><span id='drivingTime'></span></div>
+							<div class="span2 td"><span id='drivingDistance'></span></div>
+							<div class="span2 td">$<span id='drivingFuelCost'></span> / gallon</div>
+							<div class="span2 td">$<span id='drivingTotalCost'></span></div>
+						    </div>
+						     
+						    <div class= "row-fluid">
+							<div id="directionsList" class="span10">
+							    <div id="map_canvas_driving" class="mapdiv"> </div>
+							    <div id="map_driving_directions"></div>
+							    <ul id="drivingList"></ul>
+							</div>
+						    </div> <!--close driving --> 
+					    </div>	
+					    
+					    <!--TRANSIT-->
+					    
+					    <div class="tab-pane" id="transit">
+						
+						 <div class= "row-fluid">
+						    <div class="span2 th">Estimated Time</div>
+						    <div class="span2 th">Number of Bus Stops</div>
+						    <div class="span2 th">Number of Metro Stops</div> <!--?-->
+						    <div class="span2 th">Estimated Cost/Person</div>
+						    <div class="span2 th">Estimated Total Cost</div>
 						</div>
-						<div class="tab-pane" id="transit">
-						    
-							<div id="map_canvas_transit" class="mapdiv span10"> </div>
+							
+						<div class= "row-fluid">
+						    <div class="span2 td"><span id='transitTime'></span></div>
+						    <div class="span2 td"><span id='numberBusStops'></span></div> 
+						    <div class="span2 td"><span id='numberStops'></span></div> <!--?-->
+						    <div class="span2 td">$<span id='transitCostPerPerson'></span></div>
+						    <div class="span2 td">$<span id='transitTotalCost'></span></div>
+						</div>
+						     
+						<div class= "row-fluid">
+						    <div id="transitDirectionsList" class="span10">
+							<div id="map_canvas_transit" class="mapdiv"> </div>
 							<div id="map_transit_directions"></div>
-						</div>
-						<div class="tab-pane" id="taxi">
-						    <div id="taxiAvailable">
-						    <div>Rate for first 1/<span id='taxiDivisor1'></span> mile: $<span id='taxiInitial'></span></div>
-						    <div>Rate for each additional 1/<span id='taxiDivisor2'></span> mile: $<span id='taxiAdditional'></span></div>
-						    <div>Distance: <span id='taxiDistance'></span></div>
-						    <div>Estimated time: <span id='taxiTime'></span></div>
-						    <div>Estimated cost: $<span id='taxiCost'></span></div>
-							<div id="map_canvas_taxi" class="mapdiv span10"> </div>
-							<div>
-							    <h3>Taxi Companies in <span id="county1"></span></h3>
+						    </div>
+						</div> 
+					    </div> <!--close transit -->
+					    
+					    <!--TAXI -->    
+					    <div class="tab-pane" id="taxi">
+						<div id="taxiAvailable">
+						    <div class= "row-fluid">
+							<div class="span2 th">First 1/<span id='taxiDivisor1'></span> mile</div>
+							<div class="span2 th">Additional 1/<span id='taxiDivisor2'> </span> mile</div>
+							<div class="span2 th">Distance</div>
+							<div class="span2 th">Estimated Time</div>
+							<div class="span2 th">Estimated Cost</div>
+						    </div>
+						    
+						    <div class= "row-fluid">
+							<div class="span2 td">$<span id='taxiInitial'></span></div>
+							<div class="span2 td">$<span id='taxiAdditional'></span></div>
+							<div class="span2 td"><span id='taxiDistance'></span></div>
+							<div class="span2 td"><span id='taxiTime'></span></div>
+							<div class="span2 td">$<span id='taxiCost'></span></div>
+						    </div>
+						 
+						    <div class= "row-fluid">
+							<div id="taxiMapList" class="span10">
+							    <div id="map_canvas_taxi" class="mapdiv"> </div>
 							    <ul id="taxiList"></ul>
 							</div>
-							</div>
-						    <div id="taxiUnavailable" style="display:none;">
-							Taxi rates are not available for <span  id="county2"></span>
 						    </div>
-						</div>
-					</div>
-				</div>
-		    </div>
+						</div> <!--close taxi taxi available -->
+						
+						<div id="taxiUnavailable" style="display:none;">
+						    Taxi rates are not available for <span  id="county2"></span>
+						</div> 
+					    </div>  <!--close taxi tab -->
+					    
+				    </div> <!-- tab content -->
+				    
+			    </div> <!--close mainWrap -->
+			</div><!--close row fluid-->
+		    </div> <!-- close container fluid-->
 		</div>
 	 </body>
 </html>

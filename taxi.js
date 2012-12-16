@@ -24,7 +24,7 @@ function doTaxi(results){ //calculate and display taxi data
     var g = new google.maps.Geocoder();
     g.geocode(geoOptions, function (geocodeResults) {
         var county=getCounty(geocodeResults);
-        document.getElementById("county1").innerHTML=county;
+      //  document.getElementById("county1").innerHTML=county;
         document.getElementById("county2").innerHTML=county;
     
         var taxi = taxiInfo[county];
@@ -51,8 +51,16 @@ function doTaxi(results){ //calculate and display taxi data
             }
             for(var i =0;i<taxi.cabs.length;i++){
                 var e = document.createElement("li");
-                e.innerHTML=taxi.cabs[i].name + ": "+taxi.cabs[i].phone;
-                 taxilist.appendChild(e);
+                var e1=document.createElement("div");
+                var e2=document.createElement("div");
+                e1.className="taxiName";
+                e2.className="taxiPhone";
+                e1.innerHTML=taxi.cabs[i].name;
+                e2.innerHTML=taxi.cabs[i].phone;
+                taxilist.appendChild(e);
+                e.appendChild(e1);
+                e.appendChild(e2);
+                
             }
         
         }
@@ -84,9 +92,18 @@ function getCounty(geocodeResults){
 } //close getCounty
 
 
+function taxiDisplay(startCounty){
+    var rateInitial;
+    var rateFraction;
+    var rateTotal;
+    var time;
+    
+    
+}
 
-function findTaxi (startCounty, destinationCounty) {  //finds one way trip cost, round trip cost
+/*function findTaxi (startCounty, destinationCounty) {  //finds one way trip cost, round trip cost
     for(var i=0;i<2; i++){
+        
         var taxi=taxiInfo[startCounty];
         
         if(startCounty === "District of Columbia"){
@@ -96,37 +113,14 @@ function findTaxi (startCounty, destinationCounty) {  //finds one way trip cost,
             }
             
         }
-        
-        else if(startCounty === "Montgomery"){
-            
-        }
-        
-        else if(startCounty === "Prince George's " ){
-            
-        }
-        
-        else if(startCounty === "Howard" ){
-            
-        }
-        
-        else if(startCounty === "Fairfax" ){
-            
-        }
-        
-        else if(startCounty === "Arlington" ){
-            
-        }
-        
-        else if(startCounty === "Alexandria" ){
-            
-        }
-        
+    
         else {
             alert("Cab information is unavailable for your start location");
         }
 
     }
 }
+*/
 
 //console.log(findTaxi("District of Columbia", "District of Columbia"));
 

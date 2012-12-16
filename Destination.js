@@ -28,11 +28,15 @@ function gasCallBack(gasFeedResults) {
 		alert ("The avg price in your region could not be found");
 	} else {
 		var avgPrice= totalPrice/numStations;
+		document.getElementById("drivingFuelCost").innerHTML=avgPrice.toFixed(2);
+		document.getElementById("drivingTotalCost").innerHTML=(avgPrice*driveDistance/(1609.34*20)).toFixed(2);
 		console.log(avgPrice);
 	}
 
 }
 
+var driveDirectionDisplay;
+var driveDistance;
 function loadDriveDirections() { //loads map and results for driving route: from start point to parking to destination using the Google Directions API
     var directionsReq = {
         origin: startAddress,
@@ -44,7 +48,6 @@ function loadDriveDirections() { //loads map and results for driving route: from
     };
 
     var d = new google.maps.DirectionsService();
-    var directionsDisplay = new google.maps.DirectionsRenderer();
 
     d.route(directionsReq, function (results) { //callback for results
         var mapOptions = {
@@ -54,18 +57,20 @@ function loadDriveDirections() { //loads map and results for driving route: from
         };
 
         console.log('r', results); //debugging
-        
-        var map = new google.maps.Map($("#map_canvas_driving")[0], mapOptions); //writes the map to the DOM
-        directionsDisplay.setPanel(document.getElementById("map_driving_directions"));
-        directionsDisplay.setMap(map);
+	if(!driveDirectionDisplay){
+		driveDirectionDisplay = new google.maps.DirectionsRenderer();       
+		var map = new google.maps.Map($("#map_canvas_driving")[0], mapOptions); //writes the map to the DOM
+		driveDirectionDisplay.setPanel(document.getElementById("map_driving_directions"));
+		driveDirectionDisplay.setMap(map);
+	}
 
-        directionsDisplay.setDirections(results);
+        driveDirectionDisplay.setDirections(results);
 
-        driveTime = results.routes[0].legs[0].duration.value; //sets the global variable to these results for calculating drive time
-        
-        $("#carTime").innerHTML = results.routes[0].legs[0].duration.text;
-        $("#carDistance").innerHTML = results.routes[0].legs[0].distance.text;
-        console.log(driveTime); //debugging
+  //      driveTime = results.routes[0].legs[0].duration.value; //sets the global variable to these results for calculating drive time
+        driveDistance=results.routes[0].legs[0].distance.value;
+        document.getElementById("drivingTime").innerHTML = results.routes[0].legs[0].duration.text;
+        document.getElementById("drivingDistance").innerHTML = results.routes[0].legs[0].distance.text;
+//        console.log(driveTime); //debugging
 
         var geoOptions =   {
             address: startAddress,
@@ -90,6 +95,7 @@ function loadDriveDirections() { //loads map and results for driving route: from
 }//close loadDriveDirections
 
 
+var taxiDirectionDisplay;
 
 function loadTaxiDirections() { //loads map and results for driving route: from start point to end point using the Google Directions API
     var directionsReq = {
@@ -102,7 +108,6 @@ function loadTaxiDirections() { //loads map and results for driving route: from 
     };
 
     var d = new google.maps.DirectionsService();
-    var directionsDisplay = new google.maps.DirectionsRenderer();
 
     d.route(directionsReq, function (results) { //callback for results
         var mapOptions = {
@@ -110,15 +115,14 @@ function loadTaxiDirections() { //loads map and results for driving route: from 
             zoom: 17,
             mapTypeId: google.maps.MapTypeId.ROADMAP
         };
-
+	if(!taxiDirectionDisplay){
+		taxiDirectionDisplay = new google.maps.DirectionsRenderer();
+	        var map = new google.maps.Map($("#map_canvas_taxi")[0], mapOptions); //writes the map to the DOM
+	        taxiDirectionDisplay.setMap(map);		
+	}
+	
         console.log('t', results); //debugging
-        
-        var map = new google.maps.Map($("#map_canvas_taxi")[0], mapOptions); //writes the map to the DOM
-        directionsDisplay.setMap(map);
-
-        directionsDisplay.setDirections(results);
-
-       
+        taxiDirectionDisplay.setDirections(results);
 	doTaxi(results);
         
         //$("#carTime").innerHTML = results.routes[0].legs[0].duration.text;
@@ -127,40 +131,117 @@ function loadTaxiDirections() { //loads map and results for driving route: from 
     });
 } //close load Taxi Directions
 
+var transitDirections;
 
 function loadTransitDirections() { //loads map and results for public transit route using the Google Directions API
 	var directionsReq = {
-        origin: startAddress,
-        destination: destinationAddress,
-        travelMode: google.maps.TravelMode.TRANSIT,
-        unitSystem: google.maps.UnitSystem.IMPERIAL,
-        provideRouteAlternatives: true,
-        transitOptions: {
-            departureTime: buildUnixTime($('#departureTime').val())
-        }
+		origin: startAddress,
+		destination: destinationAddress,
+		travelMode: google.maps.TravelMode.TRANSIT,
+		unitSystem: google.maps.UnitSystem.IMPERIAL,
+		provideRouteAlternatives: false,
+		transitOptions: {
+		    departureTime: buildUnixTime($('#departureTime').val())
+		}
 	}
-		
-    var d = new google.maps.DirectionsService();
-    var directionsDisplay = new google.maps.DirectionsRenderer();
-		
+	
+	var d = new google.maps.DirectionsService();		
 	d.route(directionsReq, function (results) { //callback
-        var mapOptions = {
-            center: new google.maps.LatLng(38.895111, -77.036667), //centers map to DC area to fit the scope of the app
-            zoom: 17,
-            mapTypeId: google.maps.MapTypeId.ROADMAP
-        };
-            
-        console.log(results); //debugging
+
+	
+	if(!transitDirections){
+	        var mapOptions = {
+	            center: new google.maps.LatLng(38.895111, -77.036667), //centers map to DC area to fit the scope of the app
+	            zoom: 17,
+	            mapTypeId: google.maps.MapTypeId.ROADMAP
+	        };
+	        var map = new google.maps.Map($("#map_canvas_transit")[0], mapOptions);//writes the resulting map to the DOM
+		transitDirections = new google.maps.DirectionsRenderer();
+		transitDirections.setPanel(document.getElementById("map_transit_directions"));
+		transitDirections.setMap(map);
+	}
+	
+//	removeChildren(document.getElementById("map_transit_directions"));
         
-        var map = new google.maps.Map($("#map_canvas_transit")[0], mapOptions);//writes the resulting map to the DOM
-        directionsDisplay.setPanel(document.getElementById("map_transit_directions"));
-        directionsDisplay.setMap(map);			
-        directionsDisplay.setDirections(results);
-        transitTime = results.routes[0].legs[0].duration.value; //sets the global variable to the travel time for later calculation
+        transitDirections.setDirections(results);
         //timeCalc(); //calls timeCalc function so it doesn't try to calculate before the results are back from the API
-        console.log(transitTime); //debugging
+	
+	var transitCost = calculateTransitCost(results.routes);
+	
 	});
 } //close load transit directions
+
+function removeChildren(e)
+{
+	while(e.childNodes.length > 0){
+		e.removeChild(e.childNodes[0]);
+	}
+}
+function metroCost(from, to){
+	console.log("From: "+from);
+	console.log("To: "+to);
+	var fs = null;
+	for(var i =0;i<globalStations.length;i++){
+		if(
+		   globalStations[i].name ===
+		   from.substring(0, globalStations[i].name.length)
+		   )
+		{
+			fs = globalStations[i];
+		}
+	}
+	if(fs != null){
+		var ds = null;
+		for(var j=0;j<fs.prices.length;j++){
+			if(
+				fs.prices[j].name ===
+				to.substring(0,fs.prices[j].name.length)
+			){
+				ds = fs.prices[j];
+			}
+		}
+		if(ds !=null){
+			console.log("Peak price from "+from+" to "+to+": $"+ds.peak);
+			return ds.peak;
+		}else{
+			console.log("Cannot find destination: "+to)
+		}
+	}else{
+		console.log("Cannot find origin: "+from)
+	}
+	return 0;
+}
+
+function calculateTransitCost(results){
+	var totalCost = 0;
+	var busStops = 0;
+	var metroStops = 0;
+	var busCost = 0;
+	for(var i=0; i<results[0].legs[0].steps.length;i++){
+		if(results[0].legs[0].steps[i].transit){
+			if(results[0].legs[0].steps[i].transit.line.vehicle.name==="Bus"){
+				busStops+=results[0].legs[0].steps[i].transit.num_stops;
+				busCost = 1.80;
+			}else if(results[0].legs[0].steps[i].transit.line.vehicle.name==="Subway"){
+				metroStops+=results[0].legs[0].steps[i].transit.num_stops;
+				totalCost += metroCost(
+					results[0].legs[0].steps[i].transit.departure_stop.name,
+					results[0].legs[0].steps[i].transit.arrival_stop.name
+				);
+			}
+			/* alert(results[0].legs[0].steps[i].transit.line.agencies[0].name);
+			*/
+		}
+	}
+	totalCost += busCost;
+        transitTime = results[0].legs[0].duration.text; //sets the global variable to the travel time for later calculation
+	document.getElementById("transitTime").innerHTML=transitTime;
+	document.getElementById("numberStops").innerHTML=metroStops;
+	document.getElementById("numberBusStops").innerHTML=busStops;
+	document.getElementById("transitCostPerPerson").innerHTML=totalCost;
+	var people = document.getElementById("numTravellers").value;
+	document.getElementById("transitTotalCost").innerHTML=totalCost * people;
+}	
 	
 function timeCalc() { //tells the user which route is faster
 	var timeDifference; //the time difference between the three routes
@@ -220,10 +301,10 @@ function timeCalc() { //tells the user which route is faster
 } //close TimeCalc
 
 function onSubmitClick() { //calls the map loading functions when the user clicks the submit button
-	//startAddress = $("#startAddress").val();
-	//destinationAddress = $("#destination").val();
-	startAddress = "The White House";
-	destinationAddress = "US Capitol Building";
+	startAddress = $("#startAddress").val();
+	destinationAddress = $("#destination").val();
+	//startAddress = "7 gentle court";
+	//destinationAddress = "US Capitol Building";
 
     $('#map_dummy').hide();
     $('#drivingTab').tab('show');
@@ -278,8 +359,6 @@ function showmap(id){
         var map = new google.maps.Map(document.getElementById(id), mapOptions);
 	});
 }
-
-
 
 function init() {
     $("#submitForm").click(onSubmitClick);
