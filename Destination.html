@@ -28,8 +28,7 @@
 					    <form id ="informationForm" action ="">
 						Starting address: <input type="text" id="startAddress" placeholder="1600 Pennsylvania Ave. Washington, DC"/> <br />
 						Destination: <input type="text" id="destination" placeholder="US Capitol Building"/> <br />
-						Departure time: <input type="text" id="departureTime" placeholder="12:00 PM"/> <br/>
-						Number of Travellers: <input type= "number" id="numTravellers" placeholder= "2" />
+						Number of Travellers: <input type= "number" id="numTravellers" placeholder= "1" value="1" />
 						<br/>
 						<button id="submitForm">Map it!</button>
 					    </form> <!--close information form-->
@@ -45,7 +44,7 @@
 					</ul>
 				    <!--/div> <!-- close tabs wrap-->
 				    <div id="map_dummy" class="mapdiv"></div>
-				    <div class="tab-content">
+				    <div class="tab-content" style="display:none;" id="tabcontent">
 					    <div class="tab-pane" id="driving">
 						    <div class= "row-fluid">
 							<div class="span2 th">Estimated time</div>
