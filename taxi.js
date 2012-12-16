@@ -15,30 +15,123 @@ function calcRate(distance, taxiInfoItem){
     return total;
     return avgRate;
 }
+function doTaxi(results){ //calculate and display taxi data
+    var geoOptions =   {
+        address: startAddress,
+        region: "us"
+    };
+
+    var g = new google.maps.Geocoder();
+    g.geocode(geoOptions, function (geocodeResults) {
+        var county=getCounty(geocodeResults);
+        document.getElementById("county1").innerHTML=county;
+        document.getElementById("county2").innerHTML=county;
+    
+        var taxi = taxiInfo[county];
+        if(taxi===null){
+            document.getElementById("taxiAvailable").style.display="none";
+            document.getElementById("taxiUnavailable").style.display="block";
+        }else{
+            document.getElementById("taxiAvailable").style.display="block";
+            document.getElementById("taxiUnavailable").style.display="none";
+            document.getElementById("taxiTime").innerHTML=results.routes[0].legs[0].duration.text;
+            document.getElementById("taxiDistance").innerHTML=results.routes[0].legs[0].distance.text;
+            var div = Math.round(1.0/taxi.fractionSize);
+            document.getElementById("taxiDivisor1").innerHTML=div;
+            document.getElementById("taxiDivisor2").innerHTML=div;
+            document.getElementById("taxiInitial").innerHTML=taxi.initialCharge.toFixed(2);
+            document.getElementById("taxiAdditional").innerHTML=taxi.fractionCharge.toFixed(2);
+            //1609.34 meters per mile
+            var cost = calcRate(results.routes[0].legs[0].distance.value / 1609.34,taxi);
+            document.getElementById("taxiCost").innerHTML=cost.toFixed(2);
+            var taxilist=document.getElementById("taxiList");
+            var cn = taxilist.childNodes;
+            for(var i =0;i<cn.length;i++){
+                taxilist.removeChild(cn[i]);
+            }
+            for(var i =0;i<taxi.cabs.length;i++){
+                var e = document.createElement("li");
+                e.innerHTML=taxi.cabs[i].name + ": "+taxi.cabs[i].phone;
+                 taxilist.appendChild(e);
+            }
+        
+        }
+    });
+}
 
 
-calcRate(taxiDistance,taxiInfo["DC"])+
+function getCounty(geocodeResults){
+	var county = null;
+	var city = null;
+	for(var i=0; i<geocodeResults[0].address_components.length; i++){
+		
+		for (var j=0; j<geocodeResults[0].address_components [i].types.length; j++ ){
+			
+			if(geocodeResults[0].address_components[i].types[j] === "administrative_area_level_2"){
+				county = geocodeResults[0].address_components[i].short_name;
+			}
+			
+			if(geocodeResults[0].address_components[i].types[j] === "locality"){
+				city = geocodeResults[0].address_components[i].short_name;
+			}
+		}	
+	}
+	
+	if (county==null){
+		county=city;
+	}
+	return county;
+} //close getCounty
 
-function findTaxi (startAddress, destinationAddress) {  //finds one way trip cost, round trip cost
-    var i;
-    for(i=0;i<2; i++){
-        if(startAddress.search(/dc/i)){
+
+
+function findTaxi (startCounty, destinationCounty) {  //finds one way trip cost, round trip cost
+    for(var i=0;i<2; i++){
+        var taxi=taxiInfo[startCounty];
+        
+        if(startCounty === "District of Columbia"){
+            for(var j=0; j<taxiInfo["DC"].cabs[j].length;j++){
+                console.log(taxiInfo["DC"].cabs[0].name);
+                console.log(taxiInfo["DC"].cabs[0].phone); 
+            }
             
         }
         
-        else if(startAddress.search(//i)){
+        else if(startCounty === "Montgomery"){
             
         }
         
-        else if(startAddress.search(/dc/i)){
+        else if(startCounty === "Prince George's " ){
+            
+        }
+        
+        else if(startCounty === "Howard" ){
+            
+        }
+        
+        else if(startCounty === "Fairfax" ){
+            
+        }
+        
+        else if(startCounty === "Arlington" ){
+            
+        }
+        
+        else if(startCounty === "Alexandria" ){
             
         }
         
         else {
-            
+            alert("Cab information is unavailable for your start location");
         }
+
     }
-    
+}
+
+//console.log(findTaxi("District of Columbia", "District of Columbia"));
+
+//calcRate(taxiDistance,taxiInfo["DC"])+
+//calcRate(taxiDistance,taxiInfo["Dulles"]);
     
     //if destination is a different city than the start address, suggest only taxis that are in both cities
     //calculate cost 
@@ -48,20 +141,7 @@ function findTaxi (startAddress, destinationAddress) {  //finds one way trip cos
        //display total cost, avg cost
        // also display distance/ total travel time: from google API
        
-}
 
-function addressCity(startAdress, destinationAddress){
-    if (startAddress )
-    
-}
-var startAddress = document.getElementById("startAddress").value;
-var startCity= startAddress.search(/dc/i);
-
-var destinationAddress = document.getElementById("destination").value;
-
-
-
-console.log(findTaxi(startAddress,destinationAddress));
 
 
 function roundtripRate( ){
@@ -70,55 +150,17 @@ function roundtripRate( ){
     
 }
 
-calcRate(taxiDistance,taxiInfo["DC"])+
-calcRate(taxiDistance,taxiInfo["Dulles"]);
+
 
 //input initial/final destinations/
 //departure time of day/also day of week?
 
 //suggest taxis in the area, output name and phone number
 
-
-cabs[0].name;
-    
-   
-  /*  
-
- */
-    
     //input initial destination
     //input list of taxi locations
     //for the list of taxis, select the closest
-}
-
-/*
-//total cost
-function totalTaxiRateCalc (taxiDistance){
-    var i;
-    for(i=0; i<taxiDistance; i++){
-        var totalTaxiRate = 3 + ((.27)*(.125*taxiDistance)); //First 1/8 mile: $3.00m Each additional 1/8 mile: $0.27
-    } 
-    return totalTaxiRate;
-}
-
-//console.log(totalTaxiRateCalc(4));
-
-//avg rate/mile
-
-function avgTaxiRate (taxiDistance){
-    var i;
-    for(i=0; i<taxiDistance; i++){
-        var taxiRatePerMile = (3 + ((.27)*(.125*taxiDistance)))/taxiDistance; //First 1/8 mile: $3.00m Each additional 1/8 mile: $0.27
-    } 
-    
-    return taxiRatePerMile;
-}
-
-console.log(avgTaxiRate(4));
-
-*/
 
 //taxiDistance: Google API?
-
 
 //time

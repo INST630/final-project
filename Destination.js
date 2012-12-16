@@ -56,6 +56,7 @@ function loadDriveDirections() { //loads map and results for driving route: from
         console.log('r', results); //debugging
         
         var map = new google.maps.Map($("#map_canvas_driving")[0], mapOptions); //writes the map to the DOM
+        directionsDisplay.setPanel(document.getElementById("map_driving_directions"));
         directionsDisplay.setMap(map);
 
         directionsDisplay.setDirections(results);
@@ -75,13 +76,6 @@ function loadDriveDirections() { //loads map and results for driving route: from
         g.geocode(geoOptions, function (geocodeResults) {
             var inputLat= geocodeResults[0].geometry.location.lat();
             var inputLng= geocodeResults[0].geometry.location.lng();
-	    var county = null;
-			for(var i=0; i<geocodeResults[0].address_components.length(); i++){
-				if(geocodeResults[0].address_components[i].types.contains("administrative_area_level_2")){
-					county = geocodeResults[0].address_components[i].short_name;
-				}
-			}
-			console.log("county");
 			
             $.ajax({
                 url: "http://devapi.mygasfeed.com/stations/radius/" + inputLat + "/" + inputLng + "/5/reg/price/rfej9napna.json?callback=?",
@@ -94,6 +88,7 @@ function loadDriveDirections() { //loads map and results for driving route: from
     }); // end route
     
 }//close loadDriveDirections
+
 
 
 function loadTaxiDirections() { //loads map and results for driving route: from start point to end point using the Google Directions API
@@ -123,7 +118,8 @@ function loadTaxiDirections() { //loads map and results for driving route: from 
 
         directionsDisplay.setDirections(results);
 
-        driveTime = results.routes[0].legs[0].duration.value; //sets the global variable to these results for calculating drive time
+       
+	doTaxi(results);
         
         //$("#carTime").innerHTML = results.routes[0].legs[0].duration.text;
         //$("#carDistance").innerHTML = results.routes[0].legs[0].distance.text;
@@ -157,7 +153,7 @@ function loadTransitDirections() { //loads map and results for public transit ro
         console.log(results); //debugging
         
         var map = new google.maps.Map($("#map_canvas_transit")[0], mapOptions);//writes the resulting map to the DOM
-        
+        directionsDisplay.setPanel(document.getElementById("map_transit_directions"));
         directionsDisplay.setMap(map);			
         directionsDisplay.setDirections(results);
         transitTime = results.routes[0].legs[0].duration.value; //sets the global variable to the travel time for later calculation
@@ -296,6 +292,7 @@ function init() {
         $(this).tab('show');
         drawMaps(); // The google map gets messed up when it's rendered as "display: none" so re-draw all the maps everytime a tab is clicked
     });
+
 }
 
 window.onload = init;

@@ -45,13 +45,31 @@
 					<div id="map_dummy" class="mapdiv span10"></div>
 					<div class="tab-content">
 						<div class="tab-pane" id="driving">
+						    
 							<div id="map_canvas_driving" class="mapdiv span10">   </div>
+							<div id="map_driving_directions"></div>
 						</div>
 						<div class="tab-pane" id="transit">
+						    
 							<div id="map_canvas_transit" class="mapdiv span10"> </div>
+							<div id="map_transit_directions"></div>
 						</div>
 						<div class="tab-pane" id="taxi">
+						    <div id="taxiAvailable">
+						    <div>Rate for first 1/<span id='taxiDivisor1'></span> mile: $<span id='taxiInitial'></span></div>
+						    <div>Rate for each additional 1/<span id='taxiDivisor2'></span> mile: $<span id='taxiAdditional'></span></div>
+						    <div>Distance: <span id='taxiDistance'></span></div>
+						    <div>Estimated time: <span id='taxiTime'></span></div>
+						    <div>Estimated cost: $<span id='taxiCost'></span></div>
 							<div id="map_canvas_taxi" class="mapdiv span10"> </div>
+							<div>
+							    <h3>Taxi Companies in <span id="county1"></span></h3>
+							    <ul id="taxiList"></ul>
+							</div>
+							</div>
+						    <div id="taxiUnavailable" style="display:none;">
+							Taxi rates are not available for <span  id="county2"></span>
+						    </div>
 						</div>
 					</div>
 				</div>
