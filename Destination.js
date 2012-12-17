@@ -150,9 +150,11 @@ function loadTransitDirections() { //loads map and results for public transit ro
 		travelMode: google.maps.TravelMode.TRANSIT,
 		unitSystem: google.maps.UnitSystem.IMPERIAL,
 		provideRouteAlternatives: false,
+		/*
 		transitOptions: {
 		    departureTime: buildUnixTime($('#departureTime').val())
 		}
+		*/
 	}
 	
 	var d = new google.maps.DirectionsService();		
@@ -360,7 +362,7 @@ function onSubmitClick() { //calls the map loading functions when the user click
 
     return false; //makes sure the form doesn't submit itself
 }
-
+/*
 function buildUnixTime(userInputTime) {
     var now = new Date();
     var dd = now.getDate();
@@ -373,6 +375,7 @@ function buildUnixTime(userInputTime) {
     console.log(unixTime);
     return new Date(unixTime);
 }
+*/
 
 function drawMaps() {
 	loadDriveDirections();

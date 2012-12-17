@@ -24,7 +24,7 @@ function doTaxi(results){ //calculate and display taxi data
     var g = new google.maps.Geocoder();
     g.geocode(geoOptions, function (geocodeResults) {
         var county=getCounty(geocodeResults);
-      //  document.getElementById("county1").innerHTML=county;
+        document.getElementById("county1").innerHTML=county;
         document.getElementById("county2").innerHTML=county;
     
         var taxi = taxiInfo[county];

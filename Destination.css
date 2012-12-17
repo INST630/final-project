@@ -23,9 +23,17 @@ img {
 	margin: 2%;
 }
 
+.maptd{
+    width: 70%;
+}
+
 .mapdiv{
     height: 600px;
-/*    width: 400px;*/
+    width: 100%;
+/*  width: 400px;*/
+}
+.fill{
+    width:100%;
 }
 
 
@@ -72,6 +80,9 @@ body
     float:left;
 }
 */
+#sideWrap{
+    padding: 20px;
+}
 /*
 #tabsWrap div {
     float:left;
@@ -81,44 +92,54 @@ body
    /* float:left;*/
 }
 
-#taxiMapList{
-    position: relative;
-}
-
-#taxiList{
-    position: absolute;
-    background-color: rgba(102, 204, 255, 0.8);
-    top: 0px;
-    left: 0px;
-    list-style-type: none;
-    padding: 20px;
-}
 
 .th{
     text-align: center;
-    background-color: #0000DD;
+    background-color: #9999FF;
     color: #FFFF00;
     font-weight: bold;
 }
 
 .td{
     text-align: center;
-    background-color: #0000DD;
+    background-color: #9999FF;
     color: #FFFF00;
+    text-align: center;
+}
+
+.coloredBackground{
+    background-color: #9999FF;
+ /*   color: #FF9966; */
+    
+}
+
+#taxiMapList{
+    position: relative;
+}
+.taxilisttd{
+    background-color: #FFFF66;
+    padding: 50px;
+}
+.taxilisttd h3{
+    text-align: center;
+}
+
+#taxiList{
+    list-style-type: none;
 }
 
 .taxiName{
-    color:#000000;
-    font-size: 1.2EM;
+    color:#003366;
+    font-size: 1.5EM;
     text-align: center;
 }
 
 .taxiPhone{
-    color:#000000;
-    font-size: 0.8EM;
+    color:#003366;
+    font-size: 1.2EM;
     text-align: center;
+    margin-bottom: 10px;
 }
-
 
 .nav-tabs {
    border: 1px solid #ddd;
